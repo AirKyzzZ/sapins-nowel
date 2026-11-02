@@ -1,0 +1,480 @@
+{
+  "info": {
+    "name": "sapins-nowel",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "sapin/create",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));",
+              "const count = pm.response.json();",
+              "pm.test('returns a positive count', () => pm.expect(count).to.be.above(0));",
+              "pm.collectionVariables.set('sapinId', count);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/sapin/create",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "sapin",
+            "create"
+          ]
+        }
+      }
+    },
+    {
+      "name": "sapin/get",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));",
+              "const sapin = pm.response.json();",
+              "pm.test('new sapin is unsold and empty', () => {",
+              "  pm.expect(sapin.vendu).to.eql(false);",
+              "  pm.expect(sapin.decorations).to.eql([]);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/sapin/get?id={{sapinId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "sapin",
+            "get"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{sapinId}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "sapin/get unknown id",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));",
+              "pm.test('empty body', () => pm.expect(pm.response.text()).to.eql(''));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/sapin/get?id=999999",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "sapin",
+            "get"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "999999"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "sapin/addDecoration Boule",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));",
+              "pm.test('returns true', () => pm.expect(pm.response.json()).to.eql(true));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/sapin/addDecoration?idSapin={{sapinId}}&idDecoration=1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "sapin",
+            "addDecoration"
+          ],
+          "query": [
+            {
+              "key": "idSapin",
+              "value": "{{sapinId}}"
+            },
+            {
+              "key": "idDecoration",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "sapin/addDecoration Guirlande",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));",
+              "pm.test('returns true', () => pm.expect(pm.response.json()).to.eql(true));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/sapin/addDecoration?idSapin={{sapinId}}&idDecoration=2",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "sapin",
+            "addDecoration"
+          ],
+          "query": [
+            {
+              "key": "idSapin",
+              "value": "{{sapinId}}"
+            },
+            {
+              "key": "idDecoration",
+              "value": "2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "sapin/get with decorations",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));",
+              "pm.test('both decorations are persisted', () => pm.expect(pm.response.json().decorations.map(d => d.nom)).to.eql(['Boule', 'Guirlande']));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/sapin/get?id={{sapinId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "sapin",
+            "get"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{sapinId}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "sapin/addDecoration unknown decoration",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));",
+              "pm.test('returns false', () => pm.expect(pm.response.json()).to.eql(false));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/sapin/addDecoration?idSapin={{sapinId}}&idDecoration=999999",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "sapin",
+            "addDecoration"
+          ],
+          "query": [
+            {
+              "key": "idSapin",
+              "value": "{{sapinId}}"
+            },
+            {
+              "key": "idDecoration",
+              "value": "999999"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "sapin/vente",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));",
+              "const bon = pm.response.json();",
+              "pm.test('totals, address and sold flag', () => {",
+              "  pm.expect(bon.coutTotal).to.eql(35);",
+              "  pm.expect(bon.poidsTotal).to.eql(4);",
+              "  pm.expect(bon.adresse).to.eql('Maxime rue du bonjour');",
+              "  pm.expect(bon.sapin.vendu).to.eql(true);",
+              "  pm.expect(bon.client.pointsFidelite).to.be.at.least(3);",
+              "});",
+              "pm.collectionVariables.set('commandeId', bon.id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/sapin/vente?idSapin={{sapinId}}&idClient=1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "sapin",
+            "vente"
+          ],
+          "query": [
+            {
+              "key": "idSapin",
+              "value": "{{sapinId}}"
+            },
+            {
+              "key": "idClient",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "sapin/vente already sold",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));",
+              "pm.test('empty body', () => pm.expect(pm.response.text()).to.eql(''));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/sapin/vente?idSapin={{sapinId}}&idClient=1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "sapin",
+            "vente"
+          ],
+          "query": [
+            {
+              "key": "idSapin",
+              "value": "{{sapinId}}"
+            },
+            {
+              "key": "idClient",
+              "value": "1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "sapin/addDecoration already sold",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));",
+              "pm.test('returns false', () => pm.expect(pm.response.json()).to.eql(false));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/sapin/addDecoration?idSapin={{sapinId}}&idDecoration=3",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "sapin",
+            "addDecoration"
+          ],
+          "query": [
+            {
+              "key": "idSapin",
+              "value": "{{sapinId}}"
+            },
+            {
+              "key": "idDecoration",
+              "value": "3"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "sapin/commande/get",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));",
+              "const bon = pm.response.json();",
+              "pm.test('returns the order', () => {",
+              "  pm.expect(bon.id).to.eql(Number(pm.collectionVariables.get('commandeId')));",
+              "  pm.expect(bon.coutTotal).to.eql(35);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/sapin/commande/get?id={{commandeId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "sapin",
+            "commande",
+            "get"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "{{commandeId}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "sapin/commande/get unknown id",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('status 200', () => pm.response.to.have.status(200));",
+              "pm.test('empty body', () => pm.expect(pm.response.text()).to.eql(''));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/sapin/commande/get?id=999999",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "sapin",
+            "commande",
+            "get"
+          ],
+          "query": [
+            {
+              "key": "id",
+              "value": "999999"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "sapinId",
+      "value": ""
+    },
+    {
+      "key": "commandeId",
+      "value": ""
+    }
+  ]
+}
